@@ -17,6 +17,15 @@
 
   # For details on connection pooling, see rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
+production:
+  adapter: postgresql
+  encoding: unicode
+  database: api_production
+  pool: 5
+  username: api
+  password: api
+  host: 10.120.79.20
+
 development:
   adapter: postgresql
   encoding: unicode
@@ -84,4 +93,7 @@ test:
 #   production:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
+
+
+
 
