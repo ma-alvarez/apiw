@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
-  resources :clients, except: [:new, :edit]
-  resources :clients, except: [:new, :edit]
+  resources :clients, except: [:new, :edit] do
+    resources :users, except: [:new, :edit]
+  end
   require 'sidekiq/web'
   
   resources :clients, except: [:new, :edit]

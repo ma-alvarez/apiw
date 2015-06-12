@@ -9,6 +9,7 @@ set :repo_url, 'git@github.com:ma-alvarez/apiw.git'
 
 # Default deploy_to directory is /var/www/my_app
 set :deploy_to, '/home/malvarez/apiw'
+set :rails_env, "production"
 
 # Default value for :scm is :git
 # set :scm, :git
