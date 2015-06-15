@@ -3,5 +3,5 @@ class Client < ActiveRecord::Base
   friendly_id :cuit, use: :slugged
   has_many :users
   validates :name, :cuit, presence:true
-  validates :name, :cuit, uniquenness:true
+  validates :name, :cuit, uniqueness:true
 end
