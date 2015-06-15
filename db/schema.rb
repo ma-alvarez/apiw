@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150615122757) do
+ActiveRecord::Schema.define(version: 20150615174154) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,17 @@ ActiveRecord::Schema.define(version: 20150615122757) do
   end
 
   add_index "clients", ["slug"], name: "index_clients_on_slug", unique: true, using: :btree
+
+  create_table "dcvs", force: :cascade do |t|
+    t.integer  "hard_disk"
+    t.integer  "memory"
+    t.integer  "cpu"
+    t.integer  "bandwidth"
+    t.integer  "client_id"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.integer  "status",     default: 0
+  end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string   "slug",                      null: false

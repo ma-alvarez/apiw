@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
   resources :clients, except: [:new, :edit] do
     resources :users, except: [:new, :edit]
+    resources :dcvs, except: [:new, :edit] do
+      member do
+        get 'status'
+      end
+    end
   end
   require 'sidekiq/web'
   
