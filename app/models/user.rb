@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
-	validates :username,:admin, presence:true
+	validates :username, presence:true
 	validates :username, uniqueness:true
+	validates :admin, :inclusion => {:in => [true, false]}
 end
