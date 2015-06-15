@@ -8,7 +8,7 @@ class ClientsController < ApplicationController
     render json: @clients.as_json(only:[:name,:cuit])
   end
 
-  # GET /clients/1
+  # GET /clients/{:cuit}
   # GET /clients/1.json
   def show
     render json: @client.as_json(only:[:name,:cuit])
@@ -20,7 +20,7 @@ class ClientsController < ApplicationController
     @client = Client.new(client_params)
 
     if @client.save
-      render json: @client, status: :created, location: @client
+      render json: @client.as_json(only:[:name,:cuit]), status: :created, location: @client
     else
       render json: @client.errors, status: :unprocessable_entity
     end
