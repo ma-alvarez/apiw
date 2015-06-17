@@ -1,3 +1,3 @@
 class Dcv < ActiveRecord::Base
-	enum status: [ :working, :ok, :error ]
+	has_one :status
 end

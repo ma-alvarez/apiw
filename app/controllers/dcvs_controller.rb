@@ -1,23 +1,30 @@
 class DcvsController < ApplicationController
   before_filter :set_client
   before_action :set_dcv, only: [:show, :update, :destroy, :status]
+  before_action :set_status, only: [:status]
 
 
   def index
     @dcvs = @client.dcvs
-    render json: @dcvs.as_json(only:[:id,:cpu,:memory,:hard_disk,:bandwidth,:status])
+    render json: @dcvs.as_json(only:[:id,:cpu,:memory,:hard_disk,:bandwidth])
   end
 
 
   def show
-    render json: @dcv.as_json(only:[:id,:cpu,:memory,:hard_disk,:bandwidth,:status])
+    render json: @dcv.as_json(only:[:id,:cpu,:memory,:hard_disk,:bandwidth])
   end
 
   def create
     @dcv = @client.dcvs.new(dcv_params)
 
     if @dcv.save
-      render json: @dcv.as_json(only:[:id,:cpu,:memory,:hard_disk,:bandwidth,:status]), status: :created, location: [@client,@dcv]
+      render json: @dcv.as_json(only:[:id,:cpu,:memory,:hard_disk,:bandwidth]), status: :created, location: [@client,@dcv]
+      
+      #Obtain token to save in status
+      @status = @dcv.build_status
+      @status.token = token
+      @status.message = "creating dcv"
+      @status.save 
     else
       render json: @dcv.errors, status: :unprocessable_entity
     end
@@ -37,10 +44,14 @@ class DcvsController < ApplicationController
   end
 
   def status
-    render json: @dcv.as_json(only:[:status]).merge(message:"example messasge")
+    render json: @status.as_json(only:[:status,:message])
   end
 
   private
+
+    def token
+      20.times.map { [*'0'..'9', *'a'..'z'].sample }.join
+    end
 
     def set_client
       @client = Client.friendly.find(params[:client_id])
@@ -52,5 +63,9 @@ class DcvsController < ApplicationController
 
     def dcv_params
       params.permit(:cpu,:memory,:hard_disk,:bandwidth)
+    end
+
+    def set_status
+      @status = Dcv.find(params[:id]).status
     end
 end
