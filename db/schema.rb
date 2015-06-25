@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150617192849) do
+ActiveRecord::Schema.define(version: 20150624194139) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,10 +30,18 @@ ActiveRecord::Schema.define(version: 20150617192849) do
     t.integer  "hard_disk"
     t.integer  "memory"
     t.integer  "cpu"
-    t.integer  "bandwidth"
     t.integer  "client_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.integer  "bw_avg_in"
+    t.integer  "bw_avg_out"
+    t.integer  "bw_peak_in"
+    t.integer  "bw_peak_out"
+    t.integer  "public_ip_count"
+    t.string   "ip_net_web"
+    t.string   "ip_net_application"
+    t.string   "ip_net_backend"
+    t.boolean  "edge_high_availability"
   end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
@@ -64,6 +72,8 @@ ActiveRecord::Schema.define(version: 20150617192849) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean  "admin"
+    t.string   "email"
+    t.string   "password"
   end
 
 end

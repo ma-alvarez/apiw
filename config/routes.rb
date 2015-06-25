@@ -7,10 +7,7 @@ Rails.application.routes.draw do
       end
     end
   end
-  require 'sidekiq/web'
   
-  resources :clients, except: [:new, :edit]
-  mount Sidekiq::Web => '/sidekiq'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

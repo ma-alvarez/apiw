@@ -5,19 +5,19 @@ class UsersController < ApplicationController
 
   def index
     @users = @client.users
-    render json: @users.as_json(only:[:id,:username,:admin])
+    render json: @users.as_json
   end
 
 
   def show
-    render json: @user.as_json(only:[:id,:username,:admin])
+    render json: @user.as_json
   end
 
   def create
     @user = @client.users.new(user_params)
 
     if @user.save
-      render json: @user.as_json(only:[:id,:username,:admin]), status: :created, location: [@client,@user]
+      render json: @user.as_json, status: :created, location: [@client,@user]
     else
       render json: @user.errors, status: :unprocessable_entity
     end
@@ -47,6 +47,6 @@ class UsersController < ApplicationController
     end
 
     def user_params
-      params.permit(:username,:admin)
+      params.permit(:email,:password,:username,:admin)
     end
 end

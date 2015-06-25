@@ -6,19 +6,19 @@ class DcvsController < ApplicationController
 
   def index
     @dcvs = @client.dcvs
-    render json: @dcvs.as_json(only:[:id,:cpu,:memory,:hard_disk,:bandwidth])
+    render json: @dcvs.as_json
   end
 
 
   def show
-    render json: @dcv.as_json(only:[:id,:cpu,:memory,:hard_disk,:bandwidth])
+    render json: @dcv.as_json
   end
 
   def create
     @dcv = @client.dcvs.new(dcv_params)
 
     if @dcv.save
-      render json: @dcv.as_json(only:[:id,:cpu,:memory,:hard_disk,:bandwidth]), status: :created, location: [@client,@dcv]
+      render json: @dcv.as_json, status: :created, location: [@client,@dcv]
       
       #Obtain token to save in status
       @status = @dcv.build_status
@@ -62,7 +62,9 @@ class DcvsController < ApplicationController
     end
 
     def dcv_params
-      params.permit(:cpu,:memory,:hard_disk,:bandwidth)
+      params.permit(:cpu,:memory,:hard_disk,:bw_avg_in,:bw_avg_out,:bw_peak_in,
+        :bw_peak_out,:public_ip_count,:ip_net_web,:ip_net_application,:ip_net_backend,
+        :edge_high_availability)
     end
 
     def set_status
