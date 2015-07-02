@@ -15,12 +15,17 @@ class DcvsController < ApplicationController
   end
 
   def create
+    #Chequear si existe usuario LDAP, si existe llamar al servicio nuevo
+    #si no existe llamar al servicio de siempre (AltaClienteDCV)
+
+    #clientName = client.cuit - client.name - dcvs.count + 1
+    params.delete("user_id")
     @dcv = @client.dcvs.new(dcv_params)
 
     if @dcv.save
       render json: @dcv.as_json, status: :created, location: [@client,@dcv]
       
-      #Obtain token to save in status
+      #obtener token para salvar en el status
       @status = @dcv.build_status
       @status.token = token
       @status.message = "creating dcv"
@@ -47,6 +52,11 @@ class DcvsController < ApplicationController
     render json: @status.as_json(only:[:status,:message])
   end
 
+  def add_user
+    #llamar a AltaUsuarioDcv, si sale todo bien 200 sino error
+    render nothing:true, status: 200
+  end
+
   private
 
     def token
@@ -64,7 +74,7 @@ class DcvsController < ApplicationController
     def dcv_params
       params.permit(:cpu,:memory,:hard_disk,:bw_avg_in,:bw_avg_out,:bw_peak_in,
         :bw_peak_out,:public_ip_count,:ip_net_web,:ip_net_application,:ip_net_backend,
-        :edge_high_availability)
+        :edge_high_availability,:user_id)
     end
 
     def set_status

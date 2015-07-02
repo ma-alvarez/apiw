@@ -1,5 +1,6 @@
 class Dcv < ActiveRecord::Base
 	has_one :status
+	belongs_to :client
 
 	def as_json(options = {})
 		super(only:[:id,:cpu,:memory,:hard_disk,:bw_avg_in,:bw_avg_out,:bw_peak_in,

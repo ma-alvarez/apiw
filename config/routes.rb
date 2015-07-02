@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     resources :dcvs, except: [:new, :edit] do
       member do
         get 'status'
+        post 'add_user'
       end
     end
   end
