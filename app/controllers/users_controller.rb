@@ -17,9 +17,9 @@ class UsersController < ApplicationController
     @user = @client.users.new(user_params)
 
     if @user.save
-      render json: @user.as_json, status: :created, location: [@client,@user]
+      render json: @user.create_response, status: :created, location: [@client,@user]
     else
-      render json: @user.errors, status: :unprocessable_entity
+      render json: @user.create_response, status: :unprocessable_entity
     end
   end
 

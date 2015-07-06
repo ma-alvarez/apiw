@@ -23,7 +23,7 @@ class DcvsController < ApplicationController
     @dcv = @client.dcvs.new(dcv_params)
 
     if @dcv.save
-      render json: @dcv.as_json, status: :created, location: [@client,@dcv]
+      render json: @dcv.create_response, status: :created, location: [@client,@dcv]
       
       #obtener token para salvar en el status
       @status = @dcv.build_status
@@ -31,7 +31,7 @@ class DcvsController < ApplicationController
       @status.message = "creating dcv"
       @status.save 
     else
-      render json: @dcv.errors, status: :unprocessable_entity
+      render json: @dcv.create_response, status: :unprocessable_entity
     end
   end
 
