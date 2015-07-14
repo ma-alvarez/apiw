@@ -1,35 +1,15 @@
 class DcvsController < ApplicationController
+  include ActiveDirectory
+  include VraServices
+
+  VRA_TREEBASE =  "OU=Clientes Externos,OU=vRealize Automation,DC=int,DC=fibercorp,DC=com,DC=ar"
   before_filter :set_client
   before_action :set_dcv, only: [:show, :update, :destroy, :status]
   before_action :set_status, only: [:status]
+  before_action :set_user, only: [:create]
 
 
   def index
-    ldap = Net::LDAP.new  :host => "int.fibercorp.com.ar", # your LDAP host name or IP goes here,
-                          :port => "389", # your LDAP host port goes here,
-                          :base => "OU=Clientes Externos,OU=vRealize Automation,DC=int,DC=fibercorp,DC=com,DC=ar", # the base of your AD tree goes here,
-                          :auth => {
-                        :method => :simple,
-                        :username => "app_apiw", # a user w/sufficient privileges to read from AD goes here,
-                        :password => "fcQmuSQngeZo6CywpR6v" # the user's password goes here
-                      }
-    if ldap.bind
-      # Redundant? Sure - the code will be 0 and the message will be "Success".
-      puts "Connection successful!  Code:  #{ldap.get_operation_result.code}, message: #{ldap.get_operation_result.message}"
-      filter = Net::LDAP::Filter.eq( "givenName", "malvarez_fibercorp" )
-      treebase = "OU=Clientes Externos,OU=vRealize Automation,DC=int,DC=fibercorp,DC=com,DC=ar"
-
-      ldap.search( :base => treebase, :filter => filter ) do |entry|
-        puts "DN: #{entry.dn}"
-        puts "Display Name: #{entry.displayname.first}"
-        puts "First Name: #{entry.givenname.first}"
-        puts "Last Name: #{entry.sn.first}"
-        puts "Groups: #{entry.memberof}"
-      end
-    else
-      puts "Connection failed!  Code:  #{ldap.get_operation_result.code}, message: #{ldap.get_operation_result.message}"
-    end
-
     @dcvs = @client.dcvs
     render json: @dcvs.as_json
   end
@@ -42,15 +22,14 @@ class DcvsController < ApplicationController
   def create
     #Chequear si existe usuario LDAP, si existe llamar al servicio nuevo
     #si no existe llamar al servicio de siempre (AltaClienteDCV)
-
     #clientName = client.cuit - client.name - dcvs.count + 1
     params.delete("user_id")
     @dcv = @client.dcvs.new(dcv_params)
 
     if @dcv.save
       render json: @dcv.create_response, status: :created, location: [@client,@dcv]
-      
-      #obtener token para salvar en el status
+      VraServices.create_dcv(url_params)
+      #obtener token para salvar en el status, lo devuelve el VRA Service
       @status = @dcv.build_status
       @status.token = token
       @status.message = "creating dcv"
@@ -99,10 +78,18 @@ class DcvsController < ApplicationController
     def dcv_params
       params.permit(:cpu,:memory,:hard_disk,:bw_avg_in,:bw_avg_out,:bw_peak_in,
         :bw_peak_out,:public_ip_count,:ip_net_web,:ip_net_application,:ip_net_backend,
-        :edge_high_availability,:user_id)
+        :edge_high_availability,:user_id,:client_id)
     end
 
     def set_status
       @status = Dcv.find(params[:id]).status
+    end
+
+    def set_user
+      @user = User.find(params[:user_id])
+    end
+
+    def url_params
+      @user.service_parameters + "&" + @client.service_parameters + "&" + @dcv.service_parameters
     end
 end

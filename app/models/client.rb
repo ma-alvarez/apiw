@@ -14,5 +14,13 @@ class Client < ActiveRecord::Base
   	end
   	return response.as_json
   end
+
+  def client_name
+    self.cuit + "-" + self.name + "-" + (self.dcvs.count+1).to_s
+  end
+
+  def service_parameters
+    {clientName:client_name}.to_query
+  end
   
 end

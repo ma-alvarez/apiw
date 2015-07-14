@@ -8,10 +8,14 @@ class User < ActiveRecord::Base
 
   def create_response
   	if(self.valid?)
-		response = {result:"OK", message:"User created", id:self.id}
-	else
-		response = {result:"ERROR", mesage:self.errors.full_messages, id:""}
-	end
-	return response.as_json
+		  response = {result:"OK", message:"User created", id:self.id}
+	  else
+		  response = {result:"ERROR", mesage:self.errors.full_messages, id:""}
+	  end
+	  return response.as_json
+  end
+
+  def service_parameters
+    {clientEmail:email, clientLogin:username, clientPassword:password}.to_query
   end
 end
