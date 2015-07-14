@@ -5,6 +5,31 @@ class DcvsController < ApplicationController
 
 
   def index
+    ldap = Net::LDAP.new  :host => "int.fibercorp.com.ar", # your LDAP host name or IP goes here,
+                          :port => "389", # your LDAP host port goes here,
+                          :base => "OU=Clientes Externos,OU=vRealize Automation,DC=int,DC=fibercorp,DC=com,DC=ar", # the base of your AD tree goes here,
+                          :auth => {
+                        :method => :simple,
+                        :username => "app_apiw", # a user w/sufficient privileges to read from AD goes here,
+                        :password => "fcQmuSQngeZo6CywpR6v" # the user's password goes here
+                      }
+    if ldap.bind
+      # Redundant? Sure - the code will be 0 and the message will be "Success".
+      puts "Connection successful!  Code:  #{ldap.get_operation_result.code}, message: #{ldap.get_operation_result.message}"
+      filter = Net::LDAP::Filter.eq( "givenName", "malvarez_fibercorp" )
+      treebase = "OU=Clientes Externos,OU=vRealize Automation,DC=int,DC=fibercorp,DC=com,DC=ar"
+
+      ldap.search( :base => treebase, :filter => filter ) do |entry|
+        puts "DN: #{entry.dn}"
+        puts "Display Name: #{entry.displayname.first}"
+        puts "First Name: #{entry.givenname.first}"
+        puts "Last Name: #{entry.sn.first}"
+        puts "Groups: #{entry.memberof}"
+      end
+    else
+      puts "Connection failed!  Code:  #{ldap.get_operation_result.code}, message: #{ldap.get_operation_result.message}"
+    end
+
     @dcvs = @client.dcvs
     render json: @dcvs.as_json
   end
