@@ -90,6 +90,6 @@ class DcvsController < ApplicationController
     end
 
     def url_params
-      @user.service_parameters + "&" + @client.service_parameters + "&" + @dcv.service_parameters
+      @user.dcv_service_parameters + "&" + @client.dcv_service_parameters + "&" + @dcv.dcv_service_parameters
     end
 end

@@ -17,7 +17,7 @@ class Dcv < ActiveRecord::Base
 	  return response.as_json
   end
 
-  def service_parameters
+  def dcv_service_parameters
     {cpuCount:cpu, memGB:memory, storageGB:hard_disk, 
       bandwidthAvgIn:bw_avg_in, bandwidthPeakIn:bw_peak_in, bandwidthAvgOut:bw_avg_out,
       bandwidthPeakOut:bw_peak_out, publicIpCount:public_ip_count, ipNetWeb:ip_net_web,

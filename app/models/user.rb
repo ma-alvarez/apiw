@@ -15,7 +15,11 @@ class User < ActiveRecord::Base
 	  return response.as_json
   end
 
-  def service_parameters
-    {clientEmail:email, clientLogin:username, clientPassword:password}.to_query
+  def dcv_service_parameters
+    { clientEmail:email, clientLogin:username, clientPassword:password }.to_query
+  end
+
+  def add_user_parameters
+     { login:username, clientPassword:login, password:password, confirmPassowrd:password, isSupport:false}
   end
 end

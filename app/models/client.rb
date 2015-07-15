@@ -19,7 +19,11 @@ class Client < ActiveRecord::Base
     self.cuit + "-" + self.name + "-" + (self.dcvs.count+1).to_s
   end
 
-  def service_parameters
+  def dcv_service_parameters
+    {clientName:client_name}.to_query
+  end
+
+  def user_service_parameters
     {clientName:client_name}.to_query
   end
   
