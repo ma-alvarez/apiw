@@ -8,12 +8,10 @@ class DcvsController < ApplicationController
   before_action :set_status, only: [:status]
   before_action :set_user, only: [:create, :add_user]
 
-
   def index
     @dcvs = @client.dcvs
     render json: @dcvs.as_json
   end
-
 
   def show
     render json: @dcv.as_json
