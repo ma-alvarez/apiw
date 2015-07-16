@@ -6,7 +6,7 @@ class DcvsController < ApplicationController
   before_filter :set_client
   before_action :set_dcv, only: [:show, :update, :destroy, :status]
   before_action :set_status, only: [:status]
-  before_action :set_user, only: [:create]
+  before_action :set_user, only: [:create, :add_user]
 
 
   def index
@@ -28,7 +28,7 @@ class DcvsController < ApplicationController
 
     if @dcv.save
       render json: @dcv.create_response, status: :created, location: [@client,@dcv]
-      VraServices.create_dcv(url_params)
+      VraServices.create_dcv(dcv_service_parameters)
       #obtener token para salvar en el status, lo devuelve el VRA Service
       @status = @dcv.build_status
       @status.token = token
@@ -53,12 +53,13 @@ class DcvsController < ApplicationController
   end
 
   def status
+    #consultar estado con el Web Service y actualizarlo en BD PostgreSQL
     render json: @status.as_json(only:[:status,:message])
   end
 
   def add_user
-    #llamar a AltaUsuarioDcv, si sale todo bien 200 sino error
-    render nothing:true, status: 200
+    response = VraServices.add_user(add_user_service_parameters)
+    render nothing:true, status: response.code
   end
 
   private
@@ -78,7 +79,7 @@ class DcvsController < ApplicationController
     def dcv_params
       params.permit(:cpu,:memory,:hard_disk,:bw_avg_in,:bw_avg_out,:bw_peak_in,
         :bw_peak_out,:public_ip_count,:ip_net_web,:ip_net_application,:ip_net_backend,
-        :edge_high_availability,:user_id,:client_id)
+        :edge_high_availability,:user_id,:client_id,:admin)
     end
 
     def set_status
@@ -89,7 +90,20 @@ class DcvsController < ApplicationController
       @user = User.find(params[:user_id])
     end
 
-    def url_params
-      @user.dcv_service_parameters + "&" + @client.dcv_service_parameters + "&" + @dcv.dcv_service_parameters
+    def client_name
+      @client.cuit + "-" + @client.name + "-" + @dcv.id.to_s
+    end
+
+    def dcv_service_parameters
+      { clientEmail:@user.email, clientLogin:@user.username, clientPassword:@user.password,
+        clientName:client_name, cpuCount:@dcv.cpu, memGB:@dcv.memory, storageGB:@dcv.hard_disk, 
+      bandwidthAvgIn:@dcv.bw_avg_in, bandwidthPeakIn:@dcv.bw_peak_in, bandwidthAvgOut:@dcv.bw_avg_out,
+      bandwidthPeakOut:@dcv.bw_peak_out, publicIpCount:@dcv.public_ip_count, ipNetWeb:@dcv.ip_net_web,
+      ipNetApplication:@dcv.ip_net_application, ipNetBackend:@dcv.ip_net_backend,
+      edgeHA:@dcv.edge_high_availability}.to_query
+    end
+
+    def add_user_service_parameters
+      @user.add_user_parameters + "&" + @client.user_service_parameters
     end
 end

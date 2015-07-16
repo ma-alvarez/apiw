@@ -15,16 +15,9 @@ class Client < ActiveRecord::Base
   	return response.as_json
   end
 
-  def client_name
-    self.cuit + "-" + self.name + "-" + (self.dcvs.count+1).to_s
-  end
-
-  def dcv_service_parameters
-    {clientName:client_name}.to_query
-  end
-
   def user_service_parameters
-    {clientName:client_name}.to_query
+    #DESPUES CAMBIARRRRRR
+    {clientName:"30573652084-FC"}.to_query
   end
   
 end
