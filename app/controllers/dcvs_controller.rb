@@ -4,7 +4,7 @@ class DcvsController < ApplicationController
 
   VRA_TREEBASE =  "OU=Clientes Externos,OU=vRealize Automation,DC=int,DC=fibercorp,DC=com,DC=ar"
   before_filter :set_client
-  before_action :set_dcv, only: [:show, :update, :destroy, :status]
+  before_action :set_dcv, only: [:show, :update, :destroy, :status, :add_user]
   before_action :set_status, only: [:status]
   before_action :set_user, only: [:create, :add_user]
 
@@ -22,16 +22,15 @@ class DcvsController < ApplicationController
   def create
     #Chequear si existe usuario LDAP, si existe llamar al servicio nuevo
     #si no existe llamar al servicio de siempre (AltaClienteDCV)
-    #clientName = client.cuit - client.name - dcvs.count + 1
     params.delete("user_id")
     @dcv = @client.dcvs.new(dcv_params)
 
     if @dcv.save
       render json: @dcv.create_response, status: :created, location: [@client,@dcv]
-      VraServices.create_dcv(dcv_service_parameters)
-      #obtener token para salvar en el status, lo devuelve el VRA Service
+      response = VraServices.create_dcv(dcv_service_parameters)
+      #se obtiene el token para salvar en el status, lo devuelve el VRA Service
       @status = @dcv.build_status
-      @status.token = token
+      @status.token = get_token(response) 
       @status.message = "creating dcv"
       @status.save 
     else
@@ -54,6 +53,8 @@ class DcvsController < ApplicationController
 
   def status
     #consultar estado con el Web Service y actualizarlo en BD PostgreSQL
+    response = VraServices.get_status(token_service_parameters)
+    decide_status(response)
     render json: @status.as_json(only:[:status,:message])
   end
 
@@ -63,10 +64,6 @@ class DcvsController < ApplicationController
   end
 
   private
-
-    def token
-      20.times.map { [*'0'..'9', *'a'..'z'].sample }.join
-    end
 
     def set_client
       @client = Client.friendly.find(params[:client_id])
@@ -105,5 +102,25 @@ class DcvsController < ApplicationController
 
     def add_user_service_parameters
       @user.add_user_parameters + "&" + @client.user_service_parameters
+    end
+
+    def token_service_parameters
+      {tokenID:@dcv.status.token}.to_query
+    end
+
+    def get_token (response)
+      response["string"]
+    end
+
+    def decide_status(response)
+      if response["string"] == "completed"
+        @status.status = 1
+        @status.message = "DCV is ready"
+      end
+      if response["string"] == "failed"
+        @status.status = 2
+        @status.message = "error"
+      end
+      @status.save
     end
 end
