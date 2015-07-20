@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
   end
 
   def add_user_parameters
-    #ver si se puede manejar admin/user comun
+    #Por default false
      { login:username, password:password, confirmPassowrd:password, isSupport:false}.to_query
   end
 end

@@ -5,6 +5,7 @@ Rails.application.routes.draw do
       member do
         get 'status'
         post 'add_user'
+        get 'pool_stats'
       end
     end
   end
