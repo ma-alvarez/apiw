@@ -2,7 +2,8 @@ module ActiveDirectory
 
   DOMAIN_CONTROLLER = "int.fibercorp.com.ar"
   LDAP_PORT = "389"
-  BASE = "OU=Clientes Externos,DC=int,DC=fibercorp,DC=com,DC=ar"	
+  BASE = "OU=Clientes Externos,DC=int,DC=fibercorp,DC=com,DC=ar"
+  TREEBASE = "OU=Clientes Externos,OU=vRealize Automation,DC=int,DC=fibercorp,DC=com,DC=ar"	
   USERNAME = "app_apiw"
   PASSWORD = "fcQmuSQngeZo6CywpR6v"
 

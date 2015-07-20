@@ -2,12 +2,10 @@ class UsersController < ApplicationController
   before_filter :set_client
   before_action :set_user, only: [:show, :update, :destroy]
 
-
   def index
     @users = @client.users
     render json: @users.as_json
   end
-
 
   def show
     render json: @user.as_json

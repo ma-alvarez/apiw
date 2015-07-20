@@ -102,6 +102,10 @@ class DcvsController < ApplicationController
       {name:client_name}.to_query
     end
 
+    def user_service_parameters
+      {clientName:client_name}.to_query
+    end
+
     def dcv_service_parameters
       { clientEmail:@user.email, clientLogin:@user.username, clientPassword:@user.password,
         clientName:client_name, cpuCount:@dcv.cpu, memGB:@dcv.memory, storageGB:@dcv.hard_disk, 
@@ -112,7 +116,7 @@ class DcvsController < ApplicationController
     end
 
     def add_user_service_parameters
-      @user.add_user_parameters + "&" + @client.user_service_parameters
+      @user.add_user_parameters + "&" + user_service_parameters
     end
 
     def token_service_parameters

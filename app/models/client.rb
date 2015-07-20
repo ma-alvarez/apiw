@@ -14,10 +14,5 @@ class Client < ActiveRecord::Base
   	end
   	return response.as_json
   end
-
-  def user_service_parameters
-    #DESPUES CAMBIARRRRRR
-    {clientName:"30573652084-FC"}.to_query
-  end
-  
+    
 end
