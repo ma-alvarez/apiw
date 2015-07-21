@@ -6,6 +6,7 @@ Rails.application.routes.draw do
         get 'status'
         post 'add_user'
         get 'pool_stats'
+        get 'vm_stats'
       end
     end
   end

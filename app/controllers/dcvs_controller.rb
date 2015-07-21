@@ -62,12 +62,13 @@ class DcvsController < ApplicationController
   end
 
   def pool_stats
-    response = VropServices.resource_pool_stats(resource_pool_parameters)
-    render json:response.body, status:response.code
+    response = VropServices.resource_pool_stats(client_name_parameters,stats_params)
+    render json:response, status:response.code
   end
 
-  def vm_stas
-    
+  def vm_stats
+    response = VropServices.vm_stats(client_regex_parameters,stats_params)
+    render json:response, status:200
   end
 
   private
@@ -98,8 +99,19 @@ class DcvsController < ApplicationController
       @client.cuit + "-" + @client.name + "-" + @dcv.id.to_s
     end
 
-    def resource_pool_parameters
-      {name:client_name}.to_query
+    def client_name_parameters
+      #CAMBIAR por client_name
+      {name:"Wetcom"}.to_query
+    end
+
+    def client_regex_parameters
+      #CAMBIAR por client_name
+      {regex:'^' + "Wetcom" + '-\d{3}'}.to_query
+    end
+
+    def stats_params
+      {intervalType:params["intervalType"], rollUpType:params["rollUpType"],
+        "begin":params["begin"], "end":params["end"]}.to_query
     end
 
     def user_service_parameters
