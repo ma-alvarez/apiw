@@ -1,6 +1,4 @@
 class DcvsController < ApplicationController
-  include ActiveDirectory
-  include VraServices
 
   VRA_TREEBASE =  "OU=Clientes Externos,OU=vRealize Automation,DC=int,DC=fibercorp,DC=com,DC=ar"
   before_filter :set_client
