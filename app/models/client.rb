@@ -3,6 +3,7 @@ class Client < ActiveRecord::Base
   friendly_id :cuit, use: :slugged
   has_many :users
   has_many :dcvs
+  has_many :svps
   validates :name, :cuit, presence:true
   validates :name, :cuit, uniqueness:true
 

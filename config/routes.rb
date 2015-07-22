@@ -9,6 +9,11 @@ Rails.application.routes.draw do
         get 'vm_stats'
       end
     end
+    resources :svps, except: [:new, :edit] do
+      collection do
+        get 'catalog'
+      end
+    end
   end
   
   # The priority is based upon order of creation: first created -> highest priority.

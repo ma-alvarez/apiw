@@ -29,15 +29,17 @@ module	VropServices
       verify:false,
       headers:{'Accept' => 'application/json'})
       vm_ids = []
+      vm_names = []
       vm_response["resourceList"].each{|vm| vm_ids << vm["identifier"]}
+      vm_response["resourceList"].each{|vm| vm_names << vm["resourceKey"]["name"]}
       vm_stats_responses = []
-      vm_ids.each do |id|
+      vm_ids.each_with_index do |id, index|
         vm_stats_url = BASE_URL + RESOURCE_URL + "/" + id + VM_STATS_URL + stats_params
         vm_stats_response = HTTParty.get(vm_stats_url,
           basic_auth:AUTH,
           verify:false,
           headers:{'Accept' => 'application/json'})
-        vm_stats_responses << vm_stats_response
+        vm_stats_responses << vm_stats_response.merge({name:vm_names[index]})
       end  
     return vm_stats_responses
   end

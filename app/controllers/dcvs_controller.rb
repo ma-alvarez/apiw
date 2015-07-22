@@ -98,13 +98,11 @@ class DcvsController < ApplicationController
     end
 
     def client_name_parameters
-      #CAMBIAR por client_name
-      {name:"Wetcom"}.to_query
+      {name:client_name}.to_query
     end
 
     def client_regex_parameters
-      #CAMBIAR por client_name
-      {regex:'^' + "Wetcom" + '-\d{3}'}.to_query
+      {regex:'^' + client_name + '-\d{3}'}.to_query
     end
 
     def stats_params
