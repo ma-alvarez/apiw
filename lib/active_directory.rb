@@ -2,8 +2,8 @@ module ActiveDirectory
 
   DOMAIN_CONTROLLER = "int.fibercorp.com.ar"
   LDAP_PORT = "389"
-  BASE = "OU=Clientes Externos,DC=int,DC=fibercorp,DC=com,DC=ar"
-  TREEBASE = "OU=Clientes Externos,OU=vRealize Automation,DC=int,DC=fibercorp,DC=com,DC=ar"	
+  VRA_BASE = "OU=Clientes Externos,OU=vRealize Automation,DC=int,DC=fibercorp,DC=com,DC=ar"
+  BASE = "DC=int,DC=fibercorp,DC=com,DC=ar"	
   USERNAME = "app_apiw"
   PASSWORD = "fcQmuSQngeZo6CywpR6v"
 
@@ -23,9 +23,11 @@ module ActiveDirectory
   end
 
   def self.query_by_given_name(treebase,givenName)
+    attributes = ["dn", "givenName", "memberOf"]
   	filter = Net::LDAP::Filter.eq("givenName", givenName)
-	  result = @ldap.search(:base => treebase, :filter => filter)
-	  return result 		
+	  result = @ldap.search(:base => treebase, :filter => filter, :attributes => attributes) { |item|  
+	   return item  		
+    }  
   end
 
   def self.user_exists?(treebase,givenName)
