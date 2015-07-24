@@ -48,7 +48,7 @@ class SvpsController < ApplicationController
     end
 
     def set_svp
-      @svp = Svp.find(params[:id])
+      @svp = @client.svps.find(params[:id])
     end
 
     def set_user

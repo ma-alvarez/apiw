@@ -76,7 +76,7 @@ class DcvsController < ApplicationController
     end
 
     def set_dcv
-      @dcv = Dcv.find(params[:id])
+      @dcv = @client.dcvs.find(params[:id])
     end
 
     def dcv_params
@@ -140,7 +140,7 @@ class DcvsController < ApplicationController
         @status.status = 1
         @status.message = "DCV is ready"
       end
-      if response["string"] == "failed"
+      if response["string"]["failed"]
         @status.status = 2
         @status.message = "error"
       end
