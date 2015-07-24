@@ -34,4 +34,25 @@ module ActiveDirectory
     return !ActiveDirectory.query_by_given_name(treebase,givenName).empty?
   end
 
+  def self.change_permissions(givenName)
+    result = query_by_given_name(ActiveDirectory::VRA_BASE,givenName)
+    dn_user = result.dn
+    actual_group = result.memberOf.first
+    new_group = change_group(actual_group)
+    @ldap.add_attribute(new_group, "member", dn_user)
+    ops = [
+      [:delete, :member, dn_user]
+    ]
+    @ldap.modify :dn => actual_group, :operations => ops
+  end
+
+  private
+    def self.change_group(dn_group)
+      if !dn_group["-Support"].nil?
+        dn_group.gsub("Support", "Users")
+      elsif !dn_group["-Users"].nil?
+        dn_group.gsub("Users","Support")
+      end
+    end
+
 end
