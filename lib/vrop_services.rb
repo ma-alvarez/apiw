@@ -6,7 +6,7 @@ module	VropServices
   VM_KIND = "?resourceKind=VirtualMachine"
   AUTH = { username: "admin", password: "F1b3rC*rp" }
   STATS_URL = "/stats?statKey=cpu|usagemhz_average&statKey=mem|usage_average&"
-  VM_STATS_URL = "/stats?statKey=cpu|usagemhz_average&statKey=mem|usage_average&statKey=net|usage_average&statKey=virtualDisk:Aggregate of all instances|usage&"
+  VM_STATS_URL = "/stats?statKey=cpu|usagemhz_average&statKey=mem|usage_average&statKey=net|usage_average&statKey=diskspace|used&"
 
   def self.resource_pool_stats(params,stats_params)
     pool_url = BASE_URL + RESOURCE_URL + RESOURCE_POOL_KIND + "&" + params
