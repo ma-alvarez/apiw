@@ -12,7 +12,7 @@ class Dcv < ActiveRecord::Base
 	  if(self.valid?)
 	 	  response = {result:"OK", message:"DCV created", id:self.id}
 	  else
-		  response = {result:"ERROR", mesage:self.errors.full_messages, id:""}
+		  response = {result:"ERROR", mesage:"", id:""}
 	  end
 	  return response.as_json
   end
