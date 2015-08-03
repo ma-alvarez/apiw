@@ -30,7 +30,7 @@ class DcvsController < ApplicationController
       @status.message = "creating dcv"
       @status.save 
     else
-      render json: @dcv.create_response, status: :unprocessable_entity
+      render json: @dcv.create_response, status: :ok
     end
   end
 
