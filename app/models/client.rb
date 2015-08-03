@@ -11,7 +11,7 @@ class Client < ActiveRecord::Base
   	if(self.valid?)
   		response = {result:"OK", message:"Client created", id:self.cuit}
   	else
-  		response = {result:"ERROR", message:"x", id:"1"}
+  		response = {result:"ERROR", message:" ", id:" "}
   	end
   	return response.as_json
   end
