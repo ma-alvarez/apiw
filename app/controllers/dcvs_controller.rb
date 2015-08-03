@@ -142,7 +142,7 @@ class DcvsController < ApplicationController
       end
       if response["string"]["failed"]
         @status.status = 2
-        @status.message = "error"
+        @status.message = response["string"].partition("failed:")[2]
       end
       @status.save
     end
