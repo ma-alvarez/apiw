@@ -30,7 +30,11 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    @user.destroy
+    ActiveDirectory.connect
+    if ActiveDirectory.connection_ok?
+      ActiveDirectory.remove_user(@user.username)
+      @user.destroy
+    end
     head :no_content
   end
 

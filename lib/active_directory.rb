@@ -46,6 +46,12 @@ module ActiveDirectory
     @ldap.modify :dn => actual_group, :operations => ops
   end
 
+  def self.remove_user(givenName)
+    result = query_by_given_name(ActiveDirectory::BASE,givenName)
+    dn = result.dn
+    @ldap.delete :dn => dn
+  end
+
   private
     def self.change_group(dn_group)
       if !dn_group["-Support"].nil?

@@ -7,6 +7,7 @@ Rails.application.routes.draw do
         post 'add_user'
         get 'pool_stats'
         get 'vm_stats'
+        post 'change_permissions'
       end
     end
     resources :svps, except: [:new, :edit] do

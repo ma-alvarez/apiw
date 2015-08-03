@@ -2,9 +2,9 @@ class DcvsController < ApplicationController
 
   VRA_TREEBASE =  "OU=Clientes Externos,OU=vRealize Automation,DC=int,DC=fibercorp,DC=com,DC=ar"
   before_filter :set_client
-  before_action :set_dcv, only: [:show, :update, :destroy, :status, :add_user, :pool_stats]
+  before_action :set_dcv, only: [:show, :update, :destroy, :status, :add_user, :pool_stats, :change_permissions]
   before_action :set_status, only: [:status]
-  before_action :set_user, only: [:create, :add_user]
+  before_action :set_user, only: [:create, :add_user, :change_permissions]
 
   def index
     @dcvs = @client.dcvs
@@ -57,6 +57,14 @@ class DcvsController < ApplicationController
   def add_user
     response = VraServices.add_user(add_user_service_parameters)
     render nothing:true, status: response.code
+  end
+
+  def change_permissions
+    ActiveDirectory.connect
+    if ActiveDirectory.connection_ok?
+      ActiveDirectory.change_permissions(@user.username)
+    end
+    head :no_content
   end
 
   def pool_stats
