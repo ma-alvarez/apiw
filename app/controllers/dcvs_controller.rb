@@ -115,7 +115,7 @@ class DcvsController < ApplicationController
 
     def stats_params
       {intervalType:params["intervalType"], rollUpType:params["rollUpType"],
-        "begin":params["begin"], "end":params["end"]}.to_query
+        begin:params["begin"], end:params["end"]}.to_query
     end
 
     def user_service_parameters
