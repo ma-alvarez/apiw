@@ -30,6 +30,34 @@ module ActiveDirectory
     }  
   end
 
+  def self.query_by_ou(treebase,organizational_unit)
+    attributes = ["dn", "ou"]
+    filter = Net::LDAP::Filter.eq("ou", organizational_unit)
+    result = @ldap.search(:base => treebase, :filter => filter, :attributes => attributes) { |item|
+      return item
+    }
+  end
+
+  def self.disable_user(givenName)
+    result = query_by_given_name(ActiveDirectory::BASE,givenName)
+    dn = result.dn
+    user_account_control = (result.userAccountControl.first.to_i | ADS_UF_ACCOUNTDISABLE)
+    @ldap.replace_attribute dn, "userAccountControl", user_account_control.to_s
+  end
+
+  def self.enable_user(givenName)
+    result = query_by_given_name(ActiveDirectory::BASE,givenName)
+    dn = result.dn
+    user_account_control = (result.userAccountControl.first.to_i ^ ADS_UF_ACCOUNTDISABLE)
+    @ldap.replace_attribute dn, "userAccountControl", user_account_control.to_s
+  end
+
+  def self.remove_ou(ou)
+    result = query_by_ou(ActiveDirectory::BASE,ou)
+    dn = result.dn
+    @ldap.delete :dn => dn
+  end
+
   def self.user_exists?(treebase,givenName)
     return !ActiveDirectory.query_by_given_name(treebase,givenName).empty?
   end
