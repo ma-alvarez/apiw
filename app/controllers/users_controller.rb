@@ -38,6 +38,22 @@ class UsersController < ApplicationController
     head :no_content
   end
 
+  def enable
+    ActiveDirectory.connect
+    if ActiveDirectory.connection_ok?
+      ActiveDirectory.disable_user(@user.username)
+    end
+    head :no_content
+  end
+
+  def disable
+    ActiveDirectory.connect
+    if ActiveDirectory.connection_ok?
+      ActiveDirectory.enable_user(@user.username)
+    end
+    head :no_content
+  end
+
   private
 
     def set_client

@@ -43,7 +43,11 @@ class DcvsController < ApplicationController
   end
 
   def destroy
-    @dcv.destroy
+    ActiveDirectory.connect
+    if ActiveDirectory.connection_ok?
+      ActiveDirectory.remove_ou(client_name)
+      @dcv.destroy
+    end
     head :no_content
   end
 
@@ -64,6 +68,10 @@ class DcvsController < ApplicationController
     if ActiveDirectory.connection_ok?
       ActiveDirectory.change_permissions(@user.username)
     end
+    head :no_content
+  end
+
+  def disable
     head :no_content
   end
 
