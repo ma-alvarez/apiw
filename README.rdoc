@@ -5,7 +5,9 @@ application up and running.
 
 Things you may want to cover:
 
-* Ruby version
+* Ruby version: ruby 2.2.2p95 (2015-04-13 revision 50295) [x86_64-linux]
+
+* Rails version: * Ruby version: ruby 2.2.2p95 (2015-04-13 revision 50295) [x86_64-linux] 
 
 * System dependencies
 
