@@ -58,6 +58,14 @@ class DcvsController < ApplicationController
     render nothing:true, status: response.code
   end
 
+  def change_permissions
+    head :no_content
+  end
+
+  def disable
+    head :no_content
+  end
+
   def pool_stats
     # response = VropServices.resource_pool_stats(client_name_parameters,stats_params)
     response = {

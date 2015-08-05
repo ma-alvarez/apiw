@@ -34,6 +34,14 @@ class UsersController < ApplicationController
     head :no_content
   end
 
+  def enable
+    head :no_content
+  end
+
+  def disable
+    head :no_content
+  end
+
   private
 
     def set_client

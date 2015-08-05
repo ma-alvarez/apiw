@@ -1,12 +1,17 @@
 Rails.application.routes.draw do
   resources :clients, except: [:new, :edit] do
-    resources :users, except: [:new, :edit]
+    resources :users, except: [:new, :edit] do
+      post 'enable'
+      post 'disable'
+    end
     resources :dcvs, except: [:new, :edit] do
       member do
         get 'status'
         post 'add_user'
         get 'pool_stats'
         get 'vm_stats'
+        post 'change_permissions'
+        post 'disable'
       end
     end
     resources :svps, except: [:new, :edit] do
