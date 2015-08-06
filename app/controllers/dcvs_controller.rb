@@ -66,7 +66,7 @@ class DcvsController < ApplicationController
   def change_permissions
     ActiveDirectory.connect
     if ActiveDirectory.connection_ok?
-      ActiveDirectory.change_permissions(@user.username)
+      ActiveDirectory.change_permissions(@user.username, client_name)
     end
     head :no_content
   end
