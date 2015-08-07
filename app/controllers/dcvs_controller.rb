@@ -43,7 +43,7 @@ class DcvsController < ApplicationController
 
   def destroy
     @dcv.destroy
-    head :no_content
+    render json: {message: "OK"}, status: :ok
   end
 
   def status
@@ -59,11 +59,11 @@ class DcvsController < ApplicationController
   end
 
   def change_permissions
-    head :no_content
+    render json: {message: "OK"}, status: :ok
   end
 
   def disable
-    head :no_content
+    render json: {message: "OK"}, status: :ok
   end
 
   def pool_stats

@@ -31,15 +31,17 @@ class UsersController < ApplicationController
 
   def destroy
     @user.destroy
-    head :no_content
+    render json: {message: "OK"}, status: :ok
   end
 
   def enable
     head :no_content
+    render json: {message: "OK"}, status: :ok
   end
 
   def disable
     head :no_content
+    render json: {message: "OK"}, status: :ok
   end
 
   private
