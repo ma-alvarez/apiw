@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_filter :set_client
-  before_action :set_user, only: [:show, :update, :destroy]
+  before_action :set_user, only: [:show, :update, :destroy, :enable, :disable]
 
   def index
     @users = @client.users
@@ -41,7 +41,7 @@ class UsersController < ApplicationController
   def enable
     ActiveDirectory.connect
     if ActiveDirectory.connection_ok?
-      ActiveDirectory.disable_user(@user.username)
+      ActiveDirectory.enable_user(@user.username)
     end
     head :no_content
   end
@@ -49,7 +49,7 @@ class UsersController < ApplicationController
   def disable
     ActiveDirectory.connect
     if ActiveDirectory.connection_ok?
-      ActiveDirectory.enable_user(@user.username)
+      ActiveDirectory.disable_user(@user.username)
     end
     head :no_content
   end

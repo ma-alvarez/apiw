@@ -6,6 +6,7 @@ module ActiveDirectory
   BASE = "DC=int,DC=fibercorp,DC=com,DC=ar"	
   USERNAME = "app_apiw"
   PASSWORD = "fcQmuSQngeZo6CywpR6v"
+  ADS_UF_ACCOUNTDISABLE = 0x00000002
 
   def self.connect
     @ldap = Net::LDAP.new  :host => DOMAIN_CONTROLLER, # your LDAP host name or IP goes here,
@@ -23,7 +24,7 @@ module ActiveDirectory
   end
 
   def self.query_by_given_name(treebase,givenName)
-    attributes = ["dn", "givenName", "memberOf"]
+    attributes = ["dn", "givenName", "memberOf", "userAccountControl"]
   	filter = Net::LDAP::Filter.eq("givenName", givenName)
 	  result = @ldap.search(:base => treebase, :filter => filter, :attributes => attributes) { |item|  
 	   return item  		
