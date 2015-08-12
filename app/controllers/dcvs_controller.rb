@@ -102,11 +102,11 @@ class DcvsController < ApplicationController
     end
 
     def set_status
-      @status = Dcv.find(params[:id]).status
+      @status = @dcv.status
     end
 
     def set_user
-      @user = User.find(params[:user_id])
+      @user = @client.users.find(params[:user_id])
     end
 
     def client_name
