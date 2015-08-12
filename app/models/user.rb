@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   DOMAIN = "@int.fibercorp.com.ar"
 
   def as_json(options = {})
-	super(only:[:id,:email,:username,:admin])
+	super(only:[:id,:email,:username])
   end
 
   def create_response

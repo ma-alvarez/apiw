@@ -7,6 +7,10 @@ class Client < ActiveRecord::Base
   validates :name, :cuit, presence:true
   validates :name, :cuit, uniqueness:true
 
+  def as_json(options = {})
+  super(only:[:cuit,:name])
+  end
+
   def create_response
   	if(self.valid?)
   		response = {result:"OK", message:"Client created", id:self.cuit}

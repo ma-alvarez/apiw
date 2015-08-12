@@ -5,13 +5,13 @@ class ClientsController < ApplicationController
   # GET /clients.json
   def index
     @clients = Client.all
-    render json: @clients.as_json(only:[:name,:cuit])
+    render json: @clients.as_json
   end
 
   # GET /clients/{:cuit}
   # GET /clients/1.json
   def show
-    render json: @client.as_json(only:[:name,:cuit])
+    render json: @client.as_json
   end
 
   # POST /clients
@@ -20,9 +20,9 @@ class ClientsController < ApplicationController
     @client = Client.new(client_params)
 
     if @client.save
-      render json: @client.create_response, status: :created, location: @client
+      render json: @client.as_json, status: :created, location: @client
     else
-      render json: @client.create_response, status: :ok
+      render json: @client.errors, status: :unprocessable_entity
     end
   end
 

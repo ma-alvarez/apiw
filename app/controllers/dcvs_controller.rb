@@ -22,7 +22,7 @@ class DcvsController < ApplicationController
     @dcv = @client.dcvs.new(dcv_params)
 
     if @dcv.save
-      render json: @dcv.create_response, status: :created, location: [@client,@dcv]
+      render json: @dcv.as_json, status: :created, location: [@client,@dcv]
       response = VraServices.create_dcv(dcv_service_parameters)
       #se obtiene el token para salvar en el status, lo devuelve el VRA Service
       @status = @dcv.build_status
@@ -30,7 +30,7 @@ class DcvsController < ApplicationController
       @status.message = "creating dcv"
       @status.save 
     else
-      render json: @dcv.create_response, status: :ok
+      render json: @dcv.errors, status: :unprocessable_entity
     end
   end
 

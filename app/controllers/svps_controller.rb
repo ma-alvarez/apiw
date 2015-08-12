@@ -16,10 +16,10 @@ class SvpsController < ApplicationController
     params.delete("user_id")
     @svp = @client.svps.new(svp_params)
     if @svp.save
-      render json: @svp.create_response, status: :created, location: [@client,@svp]
+      render json: @svp.as_json, status: :created, location: [@client,@svp]
       response = VraServices.create_svp(svp_service_parameters, generate_svp_json)
     else
-      render json: @svp.create_response, status: :unprocessable_entity
+      render json: @svp.errors, status: :unprocessable_entity
     end
   end
 
@@ -38,7 +38,7 @@ class SvpsController < ApplicationController
 
   def catalog
     response = VraServices.catalog
-    render json:response, status:200
+    render json:response, status: :ok
   end
 
   private
