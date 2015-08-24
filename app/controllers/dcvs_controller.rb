@@ -98,7 +98,7 @@ class DcvsController < ApplicationController
     def dcv_params
       params.permit(:cpu,:memory,:hard_disk,:bw_avg_in,:bw_avg_out,:bw_peak_in,
         :bw_peak_out,:public_ip_count,:ip_net_web,:ip_net_application,:ip_net_backend,
-        :edge_high_availability,:user_id,:client_id,:admin)
+        :edge_high_availability,:user_id,:client_id,:admin,:service_type)
     end
 
     def set_status
@@ -136,7 +136,7 @@ class DcvsController < ApplicationController
       bandwidthAvgIn:@dcv.bw_avg_in, bandwidthPeakIn:@dcv.bw_peak_in, bandwidthAvgOut:@dcv.bw_avg_out,
       bandwidthPeakOut:@dcv.bw_peak_out, publicIpCount:@dcv.public_ip_count, ipNetWeb:@dcv.ip_net_web,
       ipNetApplication:@dcv.ip_net_application, ipNetBackend:@dcv.ip_net_backend,
-      edgeHA:@dcv.edge_high_availability}.to_query
+      edgeHA:@dcv.edge_high_availability, serviceType:@dcv.service_type}.to_query
     end
 
     def add_user_service_parameters
