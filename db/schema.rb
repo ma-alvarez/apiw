@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150722171531) do
+ActiveRecord::Schema.define(version: 20150824123739) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,6 +42,7 @@ ActiveRecord::Schema.define(version: 20150722171531) do
     t.string   "ip_net_application"
     t.string   "ip_net_backend"
     t.boolean  "edge_high_availability"
+    t.string   "service_type"
   end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
