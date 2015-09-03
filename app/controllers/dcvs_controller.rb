@@ -3,7 +3,7 @@ class DcvsController < ApplicationController
   VRA_TREEBASE =  "OU=Clientes Externos,OU=vRealize Automation,DC=int,DC=fibercorp,DC=com,DC=ar"
   before_filter :set_client
   before_action :set_dcv, only: [:show, :update, :destroy, :status, :add_user, :pool_stats, :change_permissions]
-  before_action :set_status, only: [:status]
+  before_action :set_status, only: [:status, :update]
   before_action :set_user, only: [:create, :add_user, :change_permissions]
 
   def index
@@ -23,7 +23,7 @@ class DcvsController < ApplicationController
 
     if @dcv.save
       render json: @dcv.as_json, status: :created, location: [@client,@dcv]
-      response = VraServices.create_dcv(dcv_service_parameters)
+      response = VraServices.create_dcv(create_dcv_service_parameters)
       #se obtiene el token para salvar en el status, lo devuelve el VRA Service
       @status = @dcv.build_status
       @status.token = get_token(response) 
@@ -35,8 +35,13 @@ class DcvsController < ApplicationController
   end
 
   def update
-    if @dcv.update(dcv_params)
+    if @dcv.update(update_dcv_params)
       head :no_content
+      response = VraServices.update_dcv(update_dcv_service_parameters)
+      @status.status = :working
+      @status.token = get_token(response)
+      @status.message = "updating dcv"
+      @status.save 
     else
       render json: @dcv.errors, status: :unprocessable_entity
     end
@@ -96,9 +101,13 @@ class DcvsController < ApplicationController
     end
 
     def dcv_params
-      params.permit(:cpu,:memory,:hard_disk,:bw_avg_in,:bw_avg_out,:bw_peak_in,
+      params.permit(:id, :cpu,:memory,:hard_disk,:bw_avg_in,:bw_avg_out,:bw_peak_in,
         :bw_peak_out,:public_ip_count,:ip_net_web,:ip_net_application,:ip_net_backend,
         :edge_high_availability,:user_id,:client_id,:admin,:service_type)
+    end
+
+    def update_dcv_params
+      params.permit(:id,:cpu,:memory,:hard_disk,:service_type)
     end
 
     def set_status
@@ -130,13 +139,18 @@ class DcvsController < ApplicationController
       {clientName:client_name}.to_query
     end
 
-    def dcv_service_parameters
+    def create_dcv_service_parameters
       { clientEmail:@user.email, clientLogin:@user.username, clientPassword:@user.password,
         clientName:client_name, cpuCount:@dcv.cpu, memGB:@dcv.memory, storageGB:@dcv.hard_disk, 
       bandwidthAvgIn:@dcv.bw_avg_in, bandwidthPeakIn:@dcv.bw_peak_in, bandwidthAvgOut:@dcv.bw_avg_out,
       bandwidthPeakOut:@dcv.bw_peak_out, publicIpCount:@dcv.public_ip_count, ipNetWeb:@dcv.ip_net_web,
       ipNetApplication:@dcv.ip_net_application, ipNetBackend:@dcv.ip_net_backend,
-      edgeHA:@dcv.edge_high_availability, serviceType:@dcv.service_type}.to_query
+      edgeHA:@dcv.edge_high_availability, serviceType:@dcv.service_type.camelize(:lower)}.to_query
+    end
+
+    def update_dcv_service_parameters
+      { clientName:client_name, serviceType:@dcv.service_type.camelize(:lower), cpuCount:@dcv.cpu,
+        memGB:@dcv.memory, storageGB:@dcv.hard_disk}.to_query
     end
 
     def add_user_service_parameters

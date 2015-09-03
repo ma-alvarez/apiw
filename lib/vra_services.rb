@@ -2,6 +2,7 @@ module	VraServices
   include HTTParty
   BASE_URL = "http://10.120.85.85/api/service.asmx"
   CREATE_DCV_URI = "/AltaClienteDCV?"
+  UPDATE_DCV_URI = "/ActualizarReservacionClienteDCV?"
   CREATE_SVP_URI = "/AltaClienteSVP?"
   ADD_USER = "/AltaUsuarioDCV?"
   GET_TOKEN = "/GetWorkflowExecutionStatus?"
@@ -16,6 +17,11 @@ module	VraServices
   def self.create_dcv(params)
   	url = BASE_URL + CREATE_DCV_URI + params
   	response = HTTParty.get(url)
+  end
+
+  def self.update_dcv(params)
+    url = BASE_URL + UPDATE_DCV_URI + params
+    response = HTTParty.get(url)
   end
 
   def self.create_svp(params, svp_json)
