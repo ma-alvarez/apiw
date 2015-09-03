@@ -14,6 +14,7 @@ Rails.application.routes.draw do
         get 'vm_stats'
         post 'change_permissions'
         post 'disable'
+        post 'enable'
       end
     end
     resources :svps, except: [:new, :edit] do

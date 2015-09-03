@@ -2,7 +2,7 @@ class DcvsController < ApplicationController
 
   VRA_TREEBASE =  "OU=Clientes Externos,OU=vRealize Automation,DC=int,DC=fibercorp,DC=com,DC=ar"
   before_filter :set_client
-  before_action :set_dcv, only: [:show, :update, :destroy, :status, :add_user, :pool_stats, :change_permissions]
+  before_action :set_dcv, only: [:show, :update, :destroy, :status, :add_user, :pool_stats, :change_permissions, :enable, :disable]
   before_action :set_status, only: [:status, :update]
   before_action :set_user, only: [:create, :add_user, :change_permissions]
 
@@ -78,6 +78,12 @@ class DcvsController < ApplicationController
 
   def disable
     head :no_content
+    VraServices.handling_dcv(handling_dcv_service_parameters(false))
+  end
+
+  def enable
+    head :no_content
+    VraServices.handling_dcv(handling_dcv_service_parameters(true))
   end
 
   def pool_stats
@@ -151,6 +157,10 @@ class DcvsController < ApplicationController
     def update_dcv_service_parameters
       { clientName:client_name, serviceType:@dcv.service_type.camelize(:lower), cpuCount:@dcv.cpu,
         memGB:@dcv.memory, storageGB:@dcv.hard_disk}.to_query
+    end
+
+    def handling_dcv_service_parameters(enable)
+      {clientName:client_name, habilitado:enable}.to_query
     end
 
     def add_user_service_parameters

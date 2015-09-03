@@ -4,6 +4,7 @@ module	VraServices
   CREATE_DCV_URI = "/AltaClienteDCV?"
   UPDATE_DCV_URI = "/ActualizarReservacionClienteDCV?"
   CREATE_SVP_URI = "/AltaClienteSVP?"
+  HANDLING_DCV_URI = "/HabilitarDeshabilitarClienteDCV?"
   ADD_USER = "/AltaUsuarioDCV?"
   GET_TOKEN = "/GetWorkflowExecutionStatus?"
   CUSTOMER_BASE_URL = "https://fc-vra.fibercorp.com.ar/catalog-service/api"
@@ -22,6 +23,11 @@ module	VraServices
   def self.update_dcv(params)
     url = BASE_URL + UPDATE_DCV_URI + params
     response = HTTParty.get(url)
+  end
+
+  def self.handling_dcv(params)
+    url = BASE_URL + HANDLING_DCV_URI + params
+    response = HTTParty.get(url) 
   end
 
   def self.create_svp(params, svp_json)
