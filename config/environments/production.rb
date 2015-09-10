@@ -3,7 +3,7 @@ Rails.application.configure do
 
   # Code is not reloaded between requests.
   config.cache_classes = true
-  config.cache_store = :redis_store, { :host => "10.120.79.22",
+  config.cache_store = :redis_store, { :host => "10.120.164.5",
                                      :port => 6379,
                                      :db => 0,
                                      :expires_in => 90.minutes }
