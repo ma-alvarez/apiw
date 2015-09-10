@@ -3,7 +3,7 @@ lock '3.2.1'
 
 set :application, 'apiw'
 set :repo_url, 'git@github.com:ma-alvarez/apiw.git'
-
+set :branch, 'production'
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
