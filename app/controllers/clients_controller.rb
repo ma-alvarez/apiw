@@ -22,7 +22,7 @@ class ClientsController < ApplicationController
     if @client.save
       render json: @client.create_response, status: :created, location: @client
     else
-      render json: @client.create_response, status: :unprocessable_entity
+      render json: @client.create_response, status: :ok
     end
   end
 
@@ -34,7 +34,7 @@ class ClientsController < ApplicationController
     if @client.update(client_params)
       head :no_content
     else
-      render json: @client.errors, status: :unprocessable_entity
+      render json: @client.errors, status: :ok
     end
   end
 
