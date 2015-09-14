@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  root 'clients#index'
   resources :clients, except: [:new, :edit] do
     resources :users, except: [:new, :edit] do
       member do
