@@ -1,6 +1,10 @@
 class ClientsController < ApplicationController
   before_action :set_client, only: [:show, :update, :destroy]
 
+
+  def hello
+    render json: "hello" + Client.first.name
+  end
   # GET /clients
   # GET /clients.json
   def index
