@@ -79,13 +79,6 @@ class SvpsController < ApplicationController
          "requestData":{  
             "entries":[  
                {  
-                  "key":"provider-blueprintId",
-                  "value":{  
-                     "type":"string",
-                     "value":"dd4de015-7d49-4e10-8d5f-90d50f4dcfa0"
-                  }
-               },
-               {  
                   "key":"provider-provisioningGroupId",
                   "value":{  
                      "type":"string",
